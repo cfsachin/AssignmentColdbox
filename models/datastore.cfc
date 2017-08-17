@@ -15,13 +15,13 @@
 		<cfset rtnStruct.validated = false>
 		<cfset rtnStruct.qUser = "">
 
-		<cfset thePassword = hash(arguments.password,'SHA')>
+		<cfset thePassword = hash(arguments.password)>
 		<!--- Validate a user --->
 		<cfquery name="rtnStruct.qUser">
 		 select *
 		 from dbo.Users
-		 where username = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.username#"> and
-			  userpassword = <cfqueryparam cfsqltype="cf_sql_varchar" value="#thePassword#">
+		 where 	email = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.username#"> and
+			  	userpassword = <cfqueryparam cfsqltype="cf_sql_varchar" value="#thePassword#">
 		</cfquery>
 
 		<cfif rtnStruct.qUser.recordcount>

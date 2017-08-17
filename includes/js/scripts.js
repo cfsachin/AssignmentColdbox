@@ -17,19 +17,57 @@ $(document).ready(function(){
 		}
 	}
 	
+	$('#Logout').click(function(){
+		let url;
+
+		url = $('#logoutform').prop('action');
+		
+		$.post( url,function(data){
+			let response = JSON.parse(data);
+			if(response.SUCCESS){
+				$('#rowloginform').show();
+				$('#loggedUsername').html('');
+				$('#rowlogoutform').hide();
+				$('.cbox_messagebox_error').hide();
+				$('.cbox_messagebox_error').html('');
+			}
+			else{
+				$('#rowlogoutform').show();
+				$('#rowloginform').hide();
+				$('#cbox_messagebox_error').show();
+				$('#cbox_messagebox_error').html(response.MESSAGE);
+			}
+		});	
+		
+	});
+	
 	$('#Submit').click(function(){
-		let data;
+		let frmData;
+		let url;
 		$('#loader').show();
 		$('#Submit').addClass('disabled');
 		
-		//frmData = $('#Login_Form').serialize();
+		frmData = $('#loginform').serialize();
 		
-		//$('#Username').prop('disabled','true');
-		//$('#Password').prop('disabled','true');
+		url = $('#loginform').prop('action');
 		
-		/*$.post( "/security/validate", frmData, function(data){
-				console.log('here');
-		});*/
-		$('#loginform').submit();
+		$.post( url, frmData, function(data){
+			let response = JSON.parse(data);
+			$('#loader').hide();
+			if(response.SUCCESS){
+				$('#rowloginform').hide();
+				$('#loggedUsername').html(response.MESSAGE);
+				$('#rowlogoutform').show();
+				$('.cbox_messagebox_error').hide();
+				$('#username').val('');
+				$('#password').val('');				
+			}
+			else{
+				$('#rowlogoutform').hide();
+				$('#rowloginform').show();
+				$('#cbox_messagebox_error').show();
+				$('#cbox_messagebox_error').html(response.MESSAGE);
+			}
+		});
 	});
 });
